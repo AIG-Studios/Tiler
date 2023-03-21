@@ -1,7 +1,5 @@
 ﻿using BezierSolution;
 using UnityEngine;
-#if UNITY_EDITOR
-#endif
 
 namespace Tiler
 {
@@ -49,9 +47,7 @@ namespace Tiler
             Rebake();
         }
 
-        // TODO
-        // [Button]
-        void Rebake()
+        public void Rebake()
         {
             if (!_bezierSpline)
                 return;
@@ -67,9 +63,7 @@ namespace Tiler
             SplineRuntimeTiler.Instance.CreateTiles(_bezierSpline, options);
         }
 
-        // TODO
-        // [Button]
-        void CenterPivot()
+        public void CenterPivot()
         {
             var cache = _bezierSpline.GeneratePointCache();
             var center = cache.GetPoint(0.5f);
