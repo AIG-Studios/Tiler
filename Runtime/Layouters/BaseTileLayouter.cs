@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Tiler
 {
@@ -9,8 +10,8 @@ namespace Tiler
         [Serializable]
         public class Entry : IGenericWeightRandomizerList<LayoutTile>
         {
-            public LayoutTile Tile;
-            public float Weight = 1;
+            [SerializeField] public LayoutTile Tile;
+            [SerializeField] public float Weight = 1;
 
             public float EntryWeight => Weight;
             public LayoutTile EntryValue => Tile;
