@@ -6,7 +6,7 @@ namespace Tiler
     // fills given space with repeating elements
     public class RepeatingFillLayouter : BaseTileLayouter
     {
-        public RepeatingFillLayouter(List<LayoutTile> tiles, bool stretch) : base(tiles)
+        public RepeatingFillLayouter(List<Entry> tiles, bool stretch) : base(tiles)
         {
             _stretch = stretch;
         }
@@ -22,7 +22,10 @@ namespace Tiler
             while (true)
             {
                 foreach (var tile in _tiles)
-                    yield return tile;
+                {
+                    for(int i = 0; i <(int)tile.Weight; i++)
+                        yield return tile.Tile;
+                }
             }
         }
 

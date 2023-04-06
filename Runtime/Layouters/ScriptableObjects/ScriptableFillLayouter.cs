@@ -6,9 +6,9 @@ namespace Tiler
     [CreateAssetMenu(fileName = "FillLayout", menuName = "Tiler/Fill Layout", order = 1)]
     public class ScriptableFillLayouter : ScriptableTileLayouter
     {
-        public List<LayoutTile> Start;
-        public List<LayoutTile> Tiles;
-        public List<LayoutTile> End;
+        public List<BaseTileLayouter.Entry> Start;
+        public List<BaseTileLayouter.Entry> Tiles;
+        public List<BaseTileLayouter.Entry> End;
 
         public bool Stretch = false;
 

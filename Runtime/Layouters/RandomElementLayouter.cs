@@ -8,8 +8,9 @@ namespace Tiler
     {
         public int Elements = 1;
 
-        public RandomElementLayouter(List<LayoutTile> tiles) : base(tiles)
+        public RandomElementLayouter(List<Entry> tiles) : base(tiles)
         {
+            _randomizer = new GenericWeightRandomizer<LayoutTile, Entry>(tiles);
         }
 
         public override LayoutResult LayoutTiles(ref LayoutData layout, TilerOptions options)
@@ -21,7 +22,9 @@ namespace Tiler
         {
             var random = new System.Random(seed);
             for (int i = 0; i < Elements; i++)
-                yield return _tiles.Random(random);
+                yield return _randomizer.Pick(null, random);
         }
+
+        GenericWeightRandomizer<LayoutTile, Entry> _randomizer;
     }
 }
