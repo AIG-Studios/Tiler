@@ -14,39 +14,17 @@ namespace Tiler
 
         public override LayoutResult LayoutTiles(ref LayoutData layout, TilerOptions options)
         {
-            var result = new LayoutResult();
-            if (_tiles.Count == 0)
-                return result;
+            var mode = _stretch ? LayoutEntry.LayoutMode.DeformAndStretch : LayoutEntry.LayoutMode.Deform;
+            return TileLayouterHelpers.LayoutTiles(ref layout, options, GetRandomTile(layout.Seed), mode);
+        }
 
-            var list = new List<LayoutEntry>();
-            float distance = layout.From;
-            var random = new System.Random(layout.Seed);
-
-            while (true)
+        IEnumerable<LayoutTile> GetRandomTile(int seed)
+        {
+            var random = new System.Random(seed);
+            while(true)
             {
-                var proposed = _tiles.Random(random);
-
-                var start = distance;
-                var end = distance + LengthOfTile(proposed, options);
-                if (layout.To < end) break;
-
-                list.Add(new LayoutEntry()
-                {
-                    Tile = proposed,
-                    From = start,
-                    To = end,
-                    ProposedMode = _stretch ? LayoutEntry.LayoutMode.DeformAndStretch : LayoutEntry.LayoutMode.Deform
-                });
-
-                distance = end;
+                yield return _tiles.Random(random);
             }
-
-            if (_stretch)
-                BaseTileLayouter.StretchToFill(ref layout, list);
-
-            result.Tiles = list;
-
-            return result;
         }
 
         bool _stretch = false;

@@ -14,35 +14,14 @@ namespace Tiler
 
         public override LayoutResult LayoutTiles(ref LayoutData layout, TilerOptions options)
         {
-            var result = new LayoutResult();
-            if (_tiles.Count == 0)
-                return result;
+            return TileLayouterHelpers.LayoutTiles(ref layout, options, GetRandomTile(layout.Seed), LayoutEntry.LayoutMode.None);
+        }
 
-            var list = new List<LayoutEntry>();
-            float distance = layout.From;
-            var random = new System.Random(layout.Seed);
-
+        IEnumerable<LayoutTile> GetRandomTile(int seed)
+        {
+            var random = new System.Random(seed);
             for (int i = 0; i < Elements; i++)
-            {
-                var proposed = _tiles.Random(random);
-
-                var start = distance;
-                var end = distance + LengthOfTile(proposed, options);
-                if (layout.To < end) break;
-
-                list.Add(new LayoutEntry()
-                {
-                    Tile = proposed,
-                    From = start,
-                    To = end,
-                });
-
-                distance = end;
-            }
-
-
-            result.Tiles = list;
-            return result;
+                yield return _tiles.Random(random);
         }
     }
 }
