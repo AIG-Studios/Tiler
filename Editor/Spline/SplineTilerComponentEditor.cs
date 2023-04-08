@@ -14,19 +14,22 @@ namespace Tiler
             DrawDefaultInspector();
 
             if (GUILayout.Button("Rebake"))
-            {
-                Rebake();
-            }
+                Rebake(false);
 
             if (GUILayout.Button("Center Pivot"))
-            {
                 CenterPivot();
-            }
+
+            if (GUILayout.Button("Force rebake"))
+                Rebake(true);
         }
 
-        void Rebake()
+        void Rebake(bool force)
         {
             var spline = target as SplineTilerComponent;
+
+            // TODO currently 
+            if (force)
+                spline.Clear();
             spline.Rebake();
         }
 

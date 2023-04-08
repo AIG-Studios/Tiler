@@ -8,6 +8,10 @@ namespace Tiler
         public float Length = 1.0f;
         public LayoutEntry.LayoutMode OverrideLayoutMode = LayoutEntry.LayoutMode.None;
 
+        // used by runtime instantiator to check if this is instance of prefab that we want
+        [HideInInspector]
+        public LayoutTile ParentPrefab;
+
         public Mesh Mesh
         {
             get

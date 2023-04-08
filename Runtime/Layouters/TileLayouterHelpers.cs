@@ -31,8 +31,11 @@ namespace Tiler
             }
         }
 
-        public static float LengthOfTile(LayoutTile tile, TilerOptions options)
+        private static float LengthOfTile(LayoutTile tile, TilerOptions options)
         {
+            // TODO to correctly layout non bending element on spline, we would need to have spline here
+            // and correctly calculate how much "spline length" would straight line take
+            // although, this solution isn't allowing us to calculate postfix layouts
             return tile.Length * options.globalScale;
         }
 

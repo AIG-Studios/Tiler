@@ -57,6 +57,8 @@ namespace Tiler
         {
             if (!_bezierSpline)
                 return;
+            if (!Layouter)
+                return;
 
             var options = new TilerOptions();
             options.owner = gameObject;
@@ -69,8 +71,16 @@ namespace Tiler
             SplineRuntimeTiler.Instance.CreateTiles(_bezierSpline, options);
         }
 
+        public void Clear()
+        {
+            if (GenerationRoot)
+                GenerationRoot.DestroyChildrenSafe();
+        }
+
         public void CenterPivot()
         {
+            if (!_bezierSpline)
+                return;
             var cache = _bezierSpline.GeneratePointCache();
             var center = cache.GetPoint(0.5f);
             var delta = center - transform.position;

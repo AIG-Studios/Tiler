@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static PlasticGui.LaunchDiffParameters;
 
 namespace Tiler
 {
@@ -46,11 +47,24 @@ namespace Tiler
         {
             var prefabInstance = "PrefabInstance";
             var res = TryToReuseGameObjectAt(index, root, prefabInstance);
-            // TODO check if prefab is corrent
+
+            // check if prefab is correct
+            if (res 
+                && res.TryGetComponent<LayoutTile>(out var previousTile)
+                && previousTile.ParentPrefab != proposed)
+
+            {
+                GameObjectExtension.DestroySafe(res);
+                res = null;
+            }
+                    
 
             if (res == null)
             {
-                res = GameObject.Instantiate(proposed.gameObject, root.transform);
+                var tile = GameObject.Instantiate(proposed, root.transform);
+                tile.ParentPrefab = proposed;
+
+                res = tile.gameObject;
                 res.name = prefabInstance;
                 res.transform.SetSiblingIndex(index);
             }
