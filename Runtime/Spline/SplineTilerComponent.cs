@@ -1,4 +1,5 @@
 ﻿using BezierSolution;
+using UnityEditor;
 using UnityEngine;
 
 namespace Tiler
@@ -39,7 +40,7 @@ namespace Tiler
 
         private void OnValidate()
         {
-            Rebake();
+            EditorApplication.delayCall += Rebake;
         }
 
         void SplineChangeDelegate(BezierSpline spline, DirtyFlags dirtyFlags)

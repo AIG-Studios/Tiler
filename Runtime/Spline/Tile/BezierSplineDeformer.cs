@@ -45,5 +45,11 @@ namespace Tiler
             var p = (_intervalStart + distance) / _length;
             return _cache.GetPoint(p);
         }
+
+        protected override Vector3 GetNormalAtDistance(float distance)
+        {
+            var p = (_intervalStart + distance) / _length;
+            return _cache.GetNormal(p);
+        }
     }
 }

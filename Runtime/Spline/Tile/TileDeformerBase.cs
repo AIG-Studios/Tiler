@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Mono.Cecil;
+using UnityEngine;
 using static Tiler.LayoutEntry;
 
 namespace Tiler
@@ -17,7 +18,15 @@ namespace Tiler
         public void Deform(TilerOptions options, LayoutEntry entry, GameObject obj)
         {
             _options = options;
-            var mesh = obj.GetComponent<MeshFilter>().sharedMesh;
+
+            Mesh mesh = null;
+            if (obj.TryGetComponent<MeshFilter>(out var filter))
+                mesh = filter.sharedMesh;
+            else
+            {
+                Debug.Assert(!WantsToDeformMesh(entry.Mode), "We need mesh to deform!");
+            }
+
             var proposed = entry.Tile;
             DeformMesh(obj, mesh, proposed.Mesh, proposed.transform, entry.From, entry.To, entry.Tile.Length, entry.Mode);
         }
@@ -82,17 +91,28 @@ namespace Tiler
 
         private void OnlyAlign()
         {
+            var length = _intervalEnd - _intervalStart;
             var startPoint = GetPositionAtDistance(0.0f);
-            var endPoint = GetPositionAtDistance(_intervalEnd - _intervalStart);
+            var endPoint = GetPositionAtDistance(length);
+            var direction = (endPoint - startPoint).normalized;
 
-            var centerPoint = (endPoint + startPoint) / 2;
-            var direction = (endPoint - centerPoint).normalized;
 
-            _resultObject.transform.localPosition = centerPoint;
-            _resultObject.transform.forward = direction;
+            startPoint = _options.root.transform.InverseTransformPoint(startPoint);
+
+            Vector3 axis = GetNormalAtDistance(length / 2);
+            _resultObject.transform.localPosition = startPoint;
+            _resultObject.transform.localRotation = Quaternion.LookRotation(direction, axis);
+            _resultObject.transform.Rotate(Vector3.up, -90);
+
+            _resultObject.transform.Translate(_sourceTransform.transform.position, Space.Self);
         }
 
         protected virtual Vector3 GetPositionAtDistance(float d)
+        {
+            return Vector3.zero;
+        }
+
+        protected virtual Vector3 GetNormalAtDistance(float distance)
         {
             return Vector3.zero;
         }
