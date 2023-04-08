@@ -1,6 +1,8 @@
 ﻿using BezierSolution;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Tiler
 {
@@ -38,10 +40,13 @@ namespace Tiler
             SetBezierSpline(null);
         }
 
+#if UNITY_EDITOR
         private void OnValidate()
         {
+            // we cannot remove gameObjects during validation
             EditorApplication.delayCall += Rebake;
         }
+#endif
 
         void SplineChangeDelegate(BezierSpline spline, DirtyFlags dirtyFlags)
         {
