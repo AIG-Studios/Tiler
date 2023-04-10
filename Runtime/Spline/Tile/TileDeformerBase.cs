@@ -96,11 +96,19 @@ namespace Tiler
             var endPoint = GetPositionAtDistance(length);
             var direction = (endPoint - startPoint).normalized;
 
-
-            startPoint = _options.root.transform.InverseTransformPoint(startPoint);
+            Vector3 position;
+            if (!_options.flipTiles)
+            {
+                position = _options.root.transform.InverseTransformPoint(startPoint);
+            }
+            else
+            {
+                position = _options.root.transform.InverseTransformPoint(endPoint);
+                direction = -direction;
+            }
 
             Vector3 axis = GetNormalAtDistance(length / 2);
-            _resultObject.transform.localPosition = startPoint;
+            _resultObject.transform.localPosition = position;
             _resultObject.transform.localRotation = Quaternion.LookRotation(direction, axis);
             _resultObject.transform.Rotate(Vector3.up, -90);
 

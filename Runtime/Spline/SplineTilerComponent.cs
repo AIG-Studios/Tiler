@@ -12,10 +12,16 @@ namespace Tiler
     [DisallowMultipleComponent]
     public class SplineTilerComponent : MonoBehaviour
     {
+        [Header("Layout")]
         [Tooltip("Layouter to add tiles to the spline.")]
         public ScriptableTileLayouter Layouter;
+
+        [Header("Layout options")]
         public int Seed = 0;
         public float Scaling = 1;
+        public bool FlipTiles = false;
+
+        [Header("Settings")]
         public GameObject GenerationRoot;
 
         BezierSpline _bezierSpline;
@@ -67,6 +73,7 @@ namespace Tiler
             options.seed = Seed;
             options.bakeToDisk = false;
             options.globalScale = Scaling;
+            options.flipTiles = FlipTiles;
 
             SplineRuntimeTiler.Instance.CreateTiles(_bezierSpline, options);
         }
