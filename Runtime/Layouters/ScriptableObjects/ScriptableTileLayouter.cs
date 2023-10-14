@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace Tiler
 {
     public abstract class ScriptableTileLayouter : ScriptableObject, ITileLayouter
     {
+        public string AdditionalBakingData;
+
         public LayoutResult LayoutTiles(ref LayoutData layout, TilerOptions options)
         {
             if (_baseLayouter == null)

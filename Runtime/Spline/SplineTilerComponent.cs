@@ -24,7 +24,11 @@ namespace Tiler
         [Header("Settings")]
         public GameObject GenerationRoot;
 
+        public bool IsBaked {  get { return isBaked; } }
+
         BezierSpline _bezierSpline;
+        [SerializeField]
+        private bool isBaked = false;
 
         void SetBezierSpline(BezierSpline spline)
         {
@@ -65,6 +69,8 @@ namespace Tiler
                 return;
             if (!Layouter)
                 return;
+            if (isBaked)
+                return;
 
             var options = new TilerOptions();
             options.owner = gameObject;
@@ -82,6 +88,12 @@ namespace Tiler
         {
             if (GenerationRoot)
                 GenerationRoot.DestroyChildrenSafe();
+        }
+
+        public void MarkAsBaked()
+        {
+            isBaked = true;
+            Clear();
         }
 
         public void CenterPivot()
