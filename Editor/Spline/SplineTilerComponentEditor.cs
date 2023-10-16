@@ -25,7 +25,7 @@ namespace Tiler
             else
             {
                 GUILayout.Space(10);
-                GUILayout.Label($"<b>Baked</b> (v {spline.BakedVersion})", EditorStyles.boldLabel);
+                GUILayout.Label($"Baked (v {spline.BakedVersion})", EditorStyles.boldLabel);
             }
 
             if (GUILayout.Button("Force rebake"))
