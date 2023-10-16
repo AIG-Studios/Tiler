@@ -1,5 +1,6 @@
 ﻿using BezierSolution;
 using UnityEngine;
+using System.Numerics;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -25,10 +26,15 @@ namespace Tiler
         public GameObject GenerationRoot;
 
         public bool IsBaked {  get { return isBaked; } }
+        public int BakedVersion { get { return bakedVersion; } }
 
         BezierSpline _bezierSpline;
-        [SerializeField]
+
+        [SerializeField, HideInInspector]
         private bool isBaked = false;
+        [SerializeField, HideInInspector]
+        private int bakedVersion = 0;
+
 
         void SetBezierSpline(BezierSpline spline)
         {
@@ -63,6 +69,12 @@ namespace Tiler
             Rebake();
         }
 
+        public void ForceRebake()
+        {
+            Clear();
+            Rebake();
+        }
+
         public void Rebake()
         {
             if (!_bezierSpline)
@@ -84,22 +96,34 @@ namespace Tiler
             SplineRuntimeTiler.Instance.CreateTiles(_bezierSpline, options);
         }
 
-        public void Clear()
+        private void Clear()
         {
             if (GenerationRoot)
                 GenerationRoot.DestroyChildrenSafe();
+
+            Transform bakeRoot = GetBakeRoot();
+            if (bakeRoot)
+                bakeRoot.gameObject.DestroyChildrenSafe();
+            isBaked = false;
         }
 
-        public void MarkAsBaked()
+        public void AssignBaked(GameObject baked, int version = 0)
         {
-            isBaked = true;
             Clear();
+
+            isBaked = true;
+            baked.transform.parent = CreateOrGetBakeRoot();
+            bakedVersion = version;
+
+            EditorUtility.SetDirty(gameObject);
+            EditorUtility.SetDirty(this);
         }
 
         public void CenterPivot()
         {
             if (!_bezierSpline)
                 return;
+
             var cache = _bezierSpline.GeneratePointCache();
             var center = cache.GetPoint(0.5f);
             var delta = center - transform.position;
@@ -110,5 +134,23 @@ namespace Tiler
                 point.transform.position -= delta;
             }
         }
+
+        private Transform GetBakeRoot()
+        {
+            return transform.Find(BAKE_ROOT_NAME);
+        }
+
+        private Transform CreateOrGetBakeRoot()
+        {
+            Transform root = GetBakeRoot();
+            if (root)
+                return root;
+
+            GameObject rootObject = new GameObject(BAKE_ROOT_NAME);
+            rootObject.transform.parent = transform;
+            return rootObject.transform;
+        }
+
+        private const string BAKE_ROOT_NAME = "Baked";
     }
 }

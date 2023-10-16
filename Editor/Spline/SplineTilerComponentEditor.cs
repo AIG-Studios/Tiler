@@ -12,12 +12,21 @@ namespace Tiler
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
+            var spline = target as SplineTilerComponent;
 
-            if (GUILayout.Button("Rebake"))
-                Rebake(false);
+            if (!spline.IsBaked)
+            {
+                if (GUILayout.Button("Rebake"))
+                    Rebake(false);
 
-            if (GUILayout.Button("Center Pivot"))
-                CenterPivot();
+                if (GUILayout.Button("Center Pivot"))
+                    CenterPivot();
+            }
+            else
+            {
+                GUILayout.Space(10);
+                GUILayout.Label($"<b>Baked</b> (v {spline.BakedVersion})", EditorStyles.boldLabel);
+            }
 
             if (GUILayout.Button("Force rebake"))
                 Rebake(true);
@@ -26,11 +35,10 @@ namespace Tiler
         void Rebake(bool force)
         {
             var spline = target as SplineTilerComponent;
-
-            // TODO currently 
             if (force)
-                spline.Clear();
-            spline.Rebake();
+                spline.ForceRebake();
+            else
+                spline.Rebake();
         }
 
         void CenterPivot()
