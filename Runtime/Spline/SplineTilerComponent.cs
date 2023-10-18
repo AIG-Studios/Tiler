@@ -147,7 +147,7 @@ namespace Tiler
                 return root;
 
             GameObject rootObject = new GameObject(BAKE_ROOT_NAME);
-            rootObject.transform.parent = transform;
+            rootObject.transform.SetParent(transform, false);
             return rootObject.transform;
         }
 
