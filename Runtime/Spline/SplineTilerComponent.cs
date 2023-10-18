@@ -112,7 +112,7 @@ namespace Tiler
             Clear();
 
             isBaked = true;
-            baked.transform.parent = CreateOrGetBakeRoot();
+            rootObject.transform.SetParent(CreateOrGetBakeRoot(), false);
             bakedVersion = version;
 
             EditorUtility.SetDirty(gameObject);
