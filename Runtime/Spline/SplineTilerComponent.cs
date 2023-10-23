@@ -115,8 +115,10 @@ namespace Tiler
             baked.transform.SetParent(CreateOrGetBakeRoot(), false);
             bakedVersion = version;
 
+#if UNITY_EDITOR
             EditorUtility.SetDirty(gameObject);
             EditorUtility.SetDirty(this);
+#endif
         }
 
         public void CenterPivot()
